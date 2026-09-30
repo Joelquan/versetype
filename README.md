@@ -1,4 +1,4 @@
-# VerseType
+# FreeWPMType
 
 Free Bible verse typing tests, set in the King James Version. Check your WPM on Scripture.
 
@@ -24,7 +24,7 @@ shareable links.
 - `index.html` home page (1 minute test)
 - `30-second-typing-test.html` through `10-minute-typing-test.html` duration landing pages
 - `custom-typing-test.html` custom text tests
-- `assets/versetype.js` the shared typing engine
+- `assets/freewpmtype.js` the shared typing engine
 - `assets/style.css` all styles
 - `sitemap.xml` sitemap
 
