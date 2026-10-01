@@ -87,14 +87,14 @@ function prettyDate() {
 
 /* ---------- theme ---------- */
 function applyTheme() {
-  const t = read("freewpmtype_theme", "dark");
+  const t = read("freewpmtype_theme_v2", "light");
   document.documentElement.setAttribute("data-theme", t === "light" ? "light" : "dark");
   const btn = $("#theme-toggle");
   if (btn) btn.textContent = (t === "light") ? "Dark mode" : "Light mode";
 }
 function toggleTheme() {
-  const t = read("freewpmtype_theme", "dark");
-  store("freewpmtype_theme", t === "light" ? "dark" : "light");
+  const t = read("freewpmtype_theme_v2", "light");
+  store("freewpmtype_theme_v2", t === "light" ? "dark" : "light");
   applyTheme();
 }
 
