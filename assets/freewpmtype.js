@@ -206,11 +206,50 @@ function currentRef(widget, pos) {
   return widget.bounds[0].ref;
 }
 
+/* Show one third of the text at a time. Segments split at word
+   boundaries so words are never cut in half. */
+function segBounds(widget) {
+  const full = widget.full, n = full.length;
+  if (n < 30) return [{ start: 0, end: n }];
+  const segs = [];
+  let start = 0;
+  for (let k = 1; k <= 3; k++) {
+    let end = n;
+    if (k < 3) {
+      end = Math.round(n * k / 3);
+      const back = full.lastIndexOf(" ", end);
+      const fwd = full.indexOf(" ", end);
+      if (back > start + 10) end = back + 1;
+      else if (fwd > start + 10) end = fwd + 1;
+      if (end <= start) end = Math.round(n * k / 3);
+    }
+    segs.push({ start: start, end: end });
+    start = end;
+  }
+  return segs;
+}
+
+function segIndexAt(widget, pos) {
+  const segs = widget.segs;
+  for (let i = 0; i < segs.length; i++) {
+    if (pos < segs[i].end || i === segs.length - 1) return i;
+  }
+  return 0;
+}
+
+function syncSeg(widget) {
+  widget.segs = segBounds(widget);
+  widget.segIndex = segIndexAt(widget, widget.typed.length);
+}
+
 function renderText(widget) {
+  if (!widget.segs) syncSeg(widget);
+  const seg = widget.segs[widget.segIndex];
+  widget.segStart = seg.start;
   const box = widget.textEl;
   box.innerHTML = "";
   const frag = document.createDocumentFragment();
-  for (let i = 0; i < widget.full.length; i++) {
+  for (let i = seg.start; i < seg.end; i++) {
     const sp = document.createElement("span");
     sp.textContent = widget.full[i];
     frag.appendChild(sp);
@@ -221,15 +260,17 @@ function renderText(widget) {
   box.appendChild(caret);
   widget.caretEl = caret;
   widget.spans = $all("span", box);
+  widget.clearedUpTo = 0;
 }
 
 function moveCaret(widget) {
-  const pos = Math.min(widget.typed.length, widget.spans.length - 1);
+  const rel = widget.typed.length - widget.segStart;
+  const pos = Math.min(Math.max(0, rel), widget.spans.length - 1);
   const sp = widget.spans[pos];
   if (!sp) return;
   const box = widget.textEl;
   let left = sp.offsetLeft, top = sp.offsetTop, h = sp.offsetHeight;
-  if (widget.typed.length >= widget.spans.length && widget.spans.length) {
+  if (rel >= widget.spans.length && widget.spans.length) {
     const last = widget.spans[widget.spans.length - 1];
     left = last.offsetLeft + last.offsetWidth;
     top = last.offsetTop;
@@ -244,11 +285,12 @@ function moveCaret(widget) {
 
 function paintChars(widget) {
   const typed = widget.typed;
+  const base = widget.segStart;
   for (let i = 0; i < widget.paintUpTo; i++) { /* already painted */ }
-  const n = Math.min(typed.length, widget.spans.length);
+  const n = Math.min(Math.max(0, typed.length - base), widget.spans.length);
   for (let i = 0; i < n; i++) {
     const sp = widget.spans[i];
-    const ok = typed[i] === widget.full[i];
+    const ok = typed[base + i] === widget.full[base + i];
     const want = ok ? "ok" : "bad";
     if (sp._cls !== want) { sp._cls = want; sp.className = want; }
   }
@@ -286,6 +328,7 @@ function ensureContent(widget) {
       widget.full += " " + c.text;
       widget.bounds.push({ start: start, end: widget.full.length, ref: c.ref });
     });
+    syncSeg(widget);
     renderText(widget);
     paintChars(widget);
   }
@@ -306,6 +349,11 @@ function onInput(widget) {
   }
   if (widget.running) {
     ensureContent(widget);
+    const si = segIndexAt(widget, v.length);
+    if (si !== widget.segIndex) {
+      widget.segIndex = si;
+      renderText(widget);
+    }
     paintChars(widget);
     moveCaret(widget);
     widget.refEl.textContent = currentRef(widget, v.length);
@@ -397,6 +445,7 @@ function restart(widget) {
   widget.inputEl.value = "";
   widget.clearedUpTo = 0;
   buildContent(widget);
+  syncSeg(widget);
   renderText(widget);
   widget.refEl.textContent = widget.bounds[0].ref;
   widget.resultsEl.hidden = true;
@@ -452,6 +501,7 @@ function initWidget(el) {
   widget.certDate = $(".vt-cert-date", el);
 
   buildContent(widget);
+  syncSeg(widget);
   renderText(widget);
   widget.refEl.textContent = widget.bounds[0].ref;
   moveCaret(widget);
