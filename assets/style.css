@@ -1,41 +1,103 @@
-/* FreeWPMType design: clean, light, teal. Our own code, our own brand. */
-:root {
-  --bg: #e9f3f9;
+/* FreeWPMType design: clean, light, five color themes. Our own code, our own brand. */
+:root,
+[data-theme="wine"] {
+  --bg: #faf2f3;
   --surface: #ffffff;
-  --surface-2: #f2f8fc;
-  --brand: #0e5a6e;
-  --brand-dark: #0a4554;
-  --brand-light: #17809a;
-  --ink: #17414e;
-  --body: #33565f;
-  --muted: #5f7e89;
-  --faint: #93aeb8;
-  --line: #d9e7ef;
+  --surface-2: #f6e9ec;
+  --brand: #722f37;
+  --brand-dark: #571f27;
+  --brand-light: #93434c;
+  --ink: #4a1f26;
+  --body: #5c3a40;
+  --muted: #8a6a70;
+  --faint: #c4a3a9;
+  --line: #e8d5d8;
   --amber: #e8a13a;
   --correct: #2e7d4f;
   --wrong: #cf3b2a;
   --wrong-bg: #fdecea;
-  --shadow: 0 6px 24px rgba(14, 90, 110, 0.10);
-  --shadow-sm: 0 2px 8px rgba(14, 90, 110, 0.12);
+  --shadow: 0 6px 24px rgba(90, 40, 48, 0.10);
+  --shadow-sm: 0 2px 8px rgba(90, 40, 48, 0.12);
 }
 
-[data-theme="dark"] {
-  --bg: #0b2129;
-  --surface: #102e38;
-  --surface-2: #0d2831;
-  --brand: #4fb3cf;
-  --brand-dark: #2b8aa5;
-  --brand-light: #7cc9de;
-  --ink: #e8f3f7;
-  --body: #b9d2da;
-  --muted: #8fb0ba;
-  --faint: #5f7e89;
-  --line: #1d404c;
-  --correct: #7bc496;
-  --wrong: #e88a7d;
-  --wrong-bg: #3d211d;
-  --shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+[data-theme="navy"] {
+  --bg: #eef3fa;
+  --surface: #ffffff;
+  --surface-2: #e4ecf7;
+  --brand: #1e3f73;
+  --brand-dark: #14305c;
+  --brand-light: #2f5b9a;
+  --ink: #16294d;
+  --body: #33475f;
+  --muted: #5f7896;
+  --faint: #9db2cc;
+  --line: #d5e0ef;
+  --amber: #e8a13a;
+  --correct: #2e7d4f;
+  --wrong: #cf3b2a;
+  --wrong-bg: #fdecea;
+  --shadow: 0 6px 24px rgba(20, 48, 92, 0.10);
+  --shadow-sm: 0 2px 8px rgba(20, 48, 92, 0.12);
+}
+
+[data-theme="olive"] {
+  --bg: #f3f5ea;
+  --surface: #ffffff;
+  --surface-2: #e9edda;
+  --brand: #67742a;
+  --brand-dark: #4e5a1e;
+  --brand-light: #7f8f3a;
+  --ink: #3c4419;
+  --body: #4c5433;
+  --muted: #75805c;
+  --faint: #aeb89a;
+  --line: #dde2c8;
+  --amber: #e8a13a;
+  --correct: #2e7d4f;
+  --wrong: #cf3b2a;
+  --wrong-bg: #fdecea;
+  --shadow: 0 6px 24px rgba(78, 90, 30, 0.10);
+  --shadow-sm: 0 2px 8px rgba(78, 90, 30, 0.12);
+}
+
+[data-theme="rust"] {
+  --bg: #faf1ea;
+  --surface: #ffffff;
+  --surface-2: #f5e4d6;
+  --brand: #b0512c;
+  --brand-dark: #8c3e20;
+  --brand-light: #c96f45;
+  --ink: #5f2f18;
+  --body: #6b4630;
+  --muted: #97705a;
+  --faint: #c9a68d;
+  --line: #eed6c2;
+  --amber: #e8a13a;
+  --correct: #2e7d4f;
+  --wrong: #cf3b2a;
+  --wrong-bg: #fdecea;
+  --shadow: 0 6px 24px rgba(140, 62, 32, 0.10);
+  --shadow-sm: 0 2px 8px rgba(140, 62, 32, 0.12);
+}
+
+[data-theme="pink"] {
+  --bg: #fdf0f5;
+  --surface: #ffffff;
+  --surface-2: #fae4ee;
+  --brand: #c2437a;
+  --brand-dark: #9c2f5c;
+  --brand-light: #dd6b97;
+  --ink: #5c1f3a;
+  --body: #6e3a50;
+  --muted: #a06e85;
+  --faint: #d3a9bc;
+  --line: #f0d3e0;
+  --amber: #e8a13a;
+  --correct: #2e7d4f;
+  --wrong: #cf3b2a;
+  --wrong-bg: #fdecea;
+  --shadow: 0 6px 24px rgba(156, 47, 92, 0.10);
+  --shadow-sm: 0 2px 8px rgba(156, 47, 92, 0.12);
 }
 
 * { box-sizing: border-box; }
@@ -62,7 +124,6 @@ h1, h2, h3 {
 /* Header: solid teal bar */
 .site-header {
   background: var(--brand-dark);
-  background: #0a4554;
   padding: 0;
   box-shadow: var(--shadow-sm);
   position: sticky;
@@ -124,11 +185,9 @@ h1, h2, h3 {
   background: var(--brand);
   color: #fff;
 }
-[data-theme="dark"] .btn { background: var(--surface-2); }
-[data-theme="dark"] .btn-solid, [data-theme="dark"] .btn.active { color: #06232c; }
 .btn:disabled { opacity: 0.5; cursor: default; transform: none; }
 
-/* Header buttons: white outline pills on the teal bar */
+/* Header buttons: white outline pills on the brand bar */
 .site-header .btn {
   background: transparent;
   color: #fff;
@@ -138,6 +197,28 @@ h1, h2, h3 {
   font-size: 12.5px;
 }
 .site-header .btn:hover { background: rgba(255, 255, 255, 0.14); transform: none; }
+
+/* Theme swatches: five color themes */
+.swatches {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  padding: 6px 10px;
+}
+.swatch {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  cursor: pointer; padding: 0;
+  transition: transform 0.15s;
+}
+.swatch:hover { transform: scale(1.2); }
+.swatch.active { border-color: #fff; box-shadow: 0 0 0 2px #fff; transform: scale(1.15); }
+.swatch[data-theme="wine"] { background: #722f37; }
+.swatch[data-theme="navy"] { background: #1e3f73; }
+.swatch[data-theme="olive"] { background: #67742a; }
+.swatch[data-theme="rust"] { background: #b0512c; }
+.swatch[data-theme="pink"] { background: #c2437a; }
 
 /* Ad slots */
 .ad-slot {
@@ -152,7 +233,6 @@ h1, h2, h3 {
   margin: 26px auto;
   background: rgba(255, 255, 255, 0.5);
 }
-[data-theme="dark"] .ad-slot { background: rgba(255, 255, 255, 0.03); }
 .ad-banner { max-width: 970px; min-height: 90px; display: flex; align-items: center; justify-content: center; }
 .ad-rect { min-height: 250px; max-width: 300px; display: flex; align-items: center; justify-content: center; }
 .ad-results { max-width: 728px; min-height: 90px; display: flex; align-items: center; justify-content: center; }
@@ -236,7 +316,6 @@ h1, h2, h3 {
 .vt-live .lv .l { font-size: 12px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; font-weight: 700; }
 .vt-actions { text-align: center; margin-top: 22px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; align-items: center; }
 .vt-actions .btn { background: var(--brand); color: #fff; }
-[data-theme="dark"] .vt-actions .btn { color: #06232c; }
 .vt-input { position: absolute; opacity: 0; pointer-events: none; top: 0; left: 0; width: 10px; height: 10px; }
 
 /* Results */
@@ -351,7 +430,6 @@ footer {
   text-align: center; color: var(--muted); font-size: 16px;
   background: rgba(255, 255, 255, 0.55);
 }
-[data-theme="dark"] footer { background: rgba(255, 255, 255, 0.02); }
 footer a { color: var(--brand); text-decoration: none; font-weight: 600; }
 footer a:hover { text-decoration: underline; }
 footer .f-brand { font-style: italic; font-weight: 800; font-size: 20px; color: var(--brand); }

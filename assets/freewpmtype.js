@@ -86,15 +86,21 @@ function prettyDate() {
 }
 
 /* ---------- theme ---------- */
-function applyTheme() {
-  const t = read("freewpmtype_theme_v2", "light");
-  document.documentElement.setAttribute("data-theme", t === "light" ? "light" : "dark");
-  const btn = $("#theme-toggle");
-  if (btn) btn.textContent = (t === "light") ? "Dark mode" : "Light mode";
+const THEMES = ["wine", "navy", "olive", "rust", "pink"];
+function currentTheme() {
+  const t = read("freewpmtype_theme_v2", "wine");
+  return THEMES.indexOf(t) >= 0 ? t : "wine";
 }
-function toggleTheme() {
-  const t = read("freewpmtype_theme_v2", "light");
-  store("freewpmtype_theme_v2", t === "light" ? "dark" : "light");
+function applyTheme() {
+  const t = currentTheme();
+  document.documentElement.setAttribute("data-theme", t);
+  $all(".swatch").forEach(function(s) {
+    s.classList.toggle("active", s.getAttribute("data-theme") === t);
+  });
+}
+function setTheme(t) {
+  if (THEMES.indexOf(t) < 0) return;
+  store("freewpmtype_theme_v2", t);
   applyTheme();
 }
 
@@ -472,8 +478,9 @@ function initWidget(el) {
 
 function initAll() {
   applyTheme();
-  const t = $("#theme-toggle");
-  if (t) t.addEventListener("click", toggleTheme);
+  $all(".swatch").forEach(function(s) {
+    s.addEventListener("click", function() { setTheme(s.getAttribute("data-theme")); });
+  });
   $all(".vt-widget").forEach(initWidget);
   window.addEventListener("afterprint", function() {
     document.body.classList.remove("print-cert");
