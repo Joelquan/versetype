@@ -206,6 +206,22 @@ function currentRef(widget, pos) {
   return widget.bounds[0].ref;
 }
 
+/* The visible section spans several shuffled verses, so one reference
+   label cannot describe it. List the references the section actually
+   contains: up to three named, the rest counted. */
+function segmentRefLabel(widget) {
+  if (!widget.segs || !widget.segs.length) return widget.bounds[0].ref;
+  const seg = widget.segs[widget.segIndex || 0];
+  const refs = [];
+  widget.bounds.forEach(function(b) {
+    if (b.end > seg.start && b.start < seg.end && refs.indexOf(b.ref) < 0) refs.push(b.ref);
+  });
+  if (refs.length <= 1) return refs[0] || widget.bounds[0].ref;
+  const shown = refs.slice(0, 3).join(" \u00B7 ");
+  const extra = refs.length - 3;
+  return shown + (extra > 0 ? " \u00B7 +" + extra + " more in this section" : "");
+}
+
 /* Show one third of the text at a time. Segments split at word
    boundaries so words are never cut in half. */
 function segBounds(widget) {
@@ -356,7 +372,7 @@ function onInput(widget) {
     }
     paintChars(widget);
     moveCaret(widget);
-    widget.refEl.textContent = currentRef(widget, v.length);
+    widget.refEl.textContent = segmentRefLabel(widget);
     updateLive(widget);
   }
 }
@@ -447,7 +463,7 @@ function restart(widget) {
   buildContent(widget);
   syncSeg(widget);
   renderText(widget);
-  widget.refEl.textContent = widget.bounds[0].ref;
+  widget.refEl.textContent = segmentRefLabel(widget);
   widget.resultsEl.hidden = true;
   widget.hintEl.style.display = "";
   widget.wpmEl.textContent = "0";
@@ -503,7 +519,7 @@ function initWidget(el) {
   buildContent(widget);
   syncSeg(widget);
   renderText(widget);
-  widget.refEl.textContent = widget.bounds[0].ref;
+  widget.refEl.textContent = segmentRefLabel(widget);
   moveCaret(widget);
   showBest(widget);
 
